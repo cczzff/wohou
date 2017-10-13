@@ -48,23 +48,3 @@ class AccountRegisterAPIView(APIView):
 
             return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-
-# 用于session登陆
-class AccountLoginAPIView(APIView):
-    serializer_class = AccountLoginSerializer
-    permission_classes = (AllowAny,)
-
-    def post(self, request, format=None):
-        data = request.data
-        serializer = AccountLoginSerializer(data=data)
-
-        if serializer.is_valid():
-            username = data['username']
-            password = data['password']
-            user = Account.objects.get(username__iexact=username)
-            if user.check_password(password):
-                login(request, user)
-                return Response(status=HTTP_200_OK)
-
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

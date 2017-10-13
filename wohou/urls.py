@@ -23,7 +23,6 @@ from account import views as account_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
-    url(r'^login/', account_views.AccountLoginAPIView.as_view()),
     url(r'^register', account_views.AccountRegisterAPIView.as_view()),
 
     url(r'^accounts/$', account_views.AccountList.as_view()),
@@ -31,5 +30,8 @@ urlpatterns = [
 
     url(r'^banners/$', banner_views.BannerList.as_view()),
     url(r'^banners/(?P<pk>[0-9]+)/$', banner_views.BannerDetail.as_view()),
+
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
 ]
 
