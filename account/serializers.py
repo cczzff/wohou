@@ -23,3 +23,9 @@ class AccountLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ('username', 'password')
+
+
+class RestPasswordSerializer(serializers.Serializer):
+    username = serializers.CharField(required=False, max_length=1024)
+    old_password = serializers.CharField(required=False, max_length=1024)
+    new_password = serializers.CharField(required=False, max_length=1024)

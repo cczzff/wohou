@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
     url(r'^register', account_views.AccountRegisterAPIView.as_view()),
+    url(r'^reset_password', account_views.RestPasswordView.as_view()),
 
     url(r'^accounts/$', account_views.AccountList.as_view()),
     url(r'^accounts/(?P<pk>[0-9]+)/$', account_views.AccountDetail.as_view()),
