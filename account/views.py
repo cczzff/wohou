@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import hashlib
+
+import os
 from django.contrib.auth import logout
 from rest_framework import generics
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
@@ -74,6 +78,8 @@ class RestPasswordView(APIView):
             if user.check_password(old_password):
                 user.set_password(new_password)
                 user.save()
+                token_key = hashlib.sha1(os.urandom(24)).hexdigest()
+                Token.objects.filter(user_id=request.user.id).update(key=token_key)
                 logout(request)
                 return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
