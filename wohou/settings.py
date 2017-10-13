@@ -106,9 +106,7 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'account.Account'
 
-AUTHENTICATION_BACKENDS = (
-    'account.backends.LoginBackend',
-)
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -155,6 +153,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
 
     ),
 

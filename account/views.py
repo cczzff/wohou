@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth import login
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from rest_framework.views import APIView
 
 from account.models import Account
-from account.serializers import AccountSerializer, AccountRegisterSerializer
+from account.serializers import AccountSerializer, AccountRegisterSerializer, AccountLoginSerializer
 
 
 class AccountList(generics.ListAPIView):
@@ -46,4 +47,24 @@ class AccountRegisterAPIView(APIView):
                                         head_img=head_img, city=city)
 
             return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+# 用于session登陆
+class AccountLoginAPIView(APIView):
+    serializer_class = AccountLoginSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        data = request.data
+        serializer = AccountLoginSerializer(data=data)
+
+        if serializer.is_valid():
+            username = data['username']
+            password = data['password']
+            user = Account.objects.get(username__iexact=username)
+            if user.check_password(password):
+                login(request, user)
+                return Response(status=HTTP_200_OK)
+
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

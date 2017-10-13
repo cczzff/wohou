@@ -23,6 +23,7 @@ from account import views as account_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
+    url(r'^login/', account_views.AccountLoginAPIView.as_view()),
     url(r'^register', account_views.AccountRegisterAPIView.as_view()),
 
     url(r'^accounts/$', account_views.AccountList.as_view()),
