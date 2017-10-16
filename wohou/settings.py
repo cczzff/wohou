@@ -29,8 +29,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'banner',
     'info',
     'account',
-    'rest_framework.authtoken'
+    'todolist'
 ]
+# Application definition
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
