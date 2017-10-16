@@ -19,6 +19,7 @@ from django.contrib import admin
 from banner import views as banner_views
 from rest_framework.authtoken import views as authtoken_views
 from account import views as account_views
+from todolist import views as todo_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,6 +32,9 @@ urlpatterns = [
 
     url(r'^banners/$', banner_views.BannerList.as_view()),
     url(r'^banners/(?P<pk>[0-9]+)/$', banner_views.BannerDetail.as_view()),
+
+    url(r'^todo/$', todo_views.TodoList.as_view()),
+    url(r'^todo/(?P<pk>[0-9]+)/$', todo_views.TodoDetail.as_view()),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
