@@ -28,6 +28,14 @@ class TodoList(generics.ListCreateAPIView):
 
 
 class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Todo.objects.all()
     serializer_class = TodoSerializer
     permission_classes = (IsOwnerOrReadOnly,)
+
+    # 针对用户进行过滤
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return Todo.objects.filter(account=user)
