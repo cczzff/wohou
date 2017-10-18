@@ -29,6 +29,7 @@ urlpatterns = [
 
     url(r'^accounts/$', account_views.AccountList.as_view()),
     url(r'^accounts/(?P<pk>[0-9]+)/$', account_views.AccountDetail.as_view()),
+    url(r'^accounts/registercode/$', account_views.RegisterCodeView.as_view()),
 
     url(r'^banners/$', banner_views.BannerList.as_view()),
     url(r'^banners/(?P<pk>[0-9]+)/$', banner_views.BannerDetail.as_view()),

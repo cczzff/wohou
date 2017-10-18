@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 import hashlib
 
 import os
+import random
+
 from django.contrib.auth import logout
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
@@ -13,8 +15,9 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from rest_framework.views import APIView
 
 from account.models import Account
-from account.serializers import AccountSerializer, AccountRegisterSerializer, AccountLoginSerializer, \
-    RestPasswordSerializer
+from account.serializers import AccountSerializer, AccountRegisterSerializer, \
+    RestPasswordSerializer, RegisterCodeSerializer
+from celery_md.tasks import celery_send_verify_code
 
 
 class AccountList(generics.ListAPIView):
@@ -82,4 +85,23 @@ class RestPasswordView(APIView):
                 Token.objects.filter(user_id=request.user.id).update(key=token_key)
                 logout(request)
                 return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class RegisterCodeView(APIView):
+    """
+    发送短信验证码
+    """
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterCodeSerializer
+
+    def post(self, request, format=None):
+        data = request.data
+        serializer = RegisterCodeSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            username = data['username']
+            code = random.randint(1000, 9999)
+            celery_send_verify_code.delay(username, code)
+
+            return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
