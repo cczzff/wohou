@@ -14,6 +14,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import timedelta
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -160,4 +162,11 @@ REST_FRAMEWORK = {
 
     'PAGINATE_BY': 10
 
+}
+
+CELERYBEAT_SCHEDULE = {
+        'send_todolist_msg': {
+            'task': 'celery_md.tasks.celery_send_todolist_msg',
+            'schedule': timedelta(seconds=600),
+        },
 }
