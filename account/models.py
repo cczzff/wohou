@@ -58,6 +58,7 @@ class Account(AbstractBaseUser):
     birthday = models.DateField('生日')
     city = models.CharField('所在城市', max_length=100)
     head_img = models.CharField('头像地址', max_length=100)
+    friends = models.ManyToManyField('self', symmetrical=False)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
