@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 
 from account.models import Account
 from account.serializers import AccountSerializer, AccountRegisterSerializer, \
-    RestPasswordSerializer, RegisterCodeSerializer
+    RestPasswordSerializer, RegisterCodeSerializer, FriendsSerializer
 from celery_md.tasks import celery_send_verify_code
 
 
@@ -102,6 +102,28 @@ class RegisterCodeView(APIView):
             username = data['username']
             code = random.randint(1000, 9999)
             celery_send_verify_code.delay(username, code)
+
+            return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class FriendsView(APIView):
+    """
+    关注与取消关注
+    """
+    serializer_class = FriendsSerializer
+
+    def post(self, request, format=None):
+        data = request.data
+        serializer = FriendsSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            username = data['username']
+            friend = Account.objects.get(username=username)
+            if data['attention'] and friend not in request.user.friends.all():
+                request.user.friends.add(friend)
+
+            if not data['attention'] and friend in request.user.friends.all():
+                request.user.friends.delete(friend)
 
             return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

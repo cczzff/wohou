@@ -15,10 +15,17 @@ def register_username_validate(username):
         raise serializers.ValidationError('该用户信息已存在')
 
 
+def is_user(username):
+
+    user = Account.objects.filter(username=username)
+    if not user:
+        raise serializers.ValidationError('该用户信息不存在')
+
+
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('username', 'nick_name', 'birthday', 'city', 'head_img')
+        fields = ('username', 'nick_name', 'birthday', 'city', 'head_img', 'friends')
 
 
 class AccountRegisterSerializer(serializers.ModelSerializer):
@@ -46,3 +53,6 @@ class RegisterCodeSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=1024, validators=[register_username_validate])
 
 
+class FriendsSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=1024, validators=[is_user])
+    attention = serializers.BooleanField(default=False)
