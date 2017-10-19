@@ -19,8 +19,8 @@ class ArticleList(generics.ListCreateAPIView):
     # 针对用户进行过滤
     def get_queryset(self):
         articles = Article.objects.all()
-        for article in articles:
-            article.body = markdown(article.body)
+        # for article in articles:
+        #     article.body = markdown(article.body)
         return articles
 
     # 用户创建的时候加入account
@@ -41,6 +41,6 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
         user = self.request.user
 
         articles = Article.objects.filter(account=user)
-        for article in articles:
-            article.body = markdown(article.body)
+        # for article in articles:
+        #     article.body = markdown(article.body)
         return articles
