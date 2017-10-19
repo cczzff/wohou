@@ -35,7 +35,7 @@ class AccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, password):
-        user = self.create_user(username, password)
+        user = self.create_user(username, password, nick_name='admin', birthday='2012-2-2', head_img='', city='深圳')
         user.is_admin = True
         user.save(using=self._db)
         return user
