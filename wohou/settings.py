@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'banner',
     'info',
     'account',
-    'todolist'
+    'todolist',
+    'article'
 ]
 # Application definition
 
