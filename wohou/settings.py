@@ -171,3 +171,15 @@ CELERYBEAT_SCHEDULE = {
             'schedule': timedelta(seconds=600),
         },
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # 连接池支持高并发
+            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+        }
+    }
+}
