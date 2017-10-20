@@ -43,7 +43,6 @@ class AccountRegisterAPIView(APIView):
             return Response("用户名已存在", HTTP_400_BAD_REQUEST)
         serializer = AccountRegisterSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            print data
             username = data['username']
             password = data['password']
             nick_name = data['nick_name']

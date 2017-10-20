@@ -29,9 +29,13 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class AccountRegisterSerializer(serializers.ModelSerializer):
+    code = serializers.CharField()
+
     class Meta:
         model = Account
-        fields = ('username', 'password', 'nick_name', 'birthday', 'city', 'head_img')
+        fields = ('username', 'password', 'nick_name', 'birthday', 'city', 'head_img', 'code')
+
+        extra_kwargs = {'code': {'write_only': True}}
 
 
 class AccountLoginSerializer(serializers.ModelSerializer):
