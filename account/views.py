@@ -6,6 +6,7 @@ import hashlib
 import os
 import random
 
+from django.core.cache import cache
 from django.contrib.auth import logout
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
@@ -18,6 +19,7 @@ from account.models import Account
 from account.serializers import AccountSerializer, AccountRegisterSerializer, \
     RestPasswordSerializer, RegisterCodeSerializer, FriendsSerializer
 from celery_md.tasks import celery_send_verify_code
+from constant import CACHE_REGISTER
 
 
 class AccountList(generics.ListAPIView):
@@ -100,8 +102,9 @@ class RegisterCodeView(APIView):
         if serializer.is_valid(raise_exception=True):
             username = data['username']
             code = random.randint(1000, 9999)
-            celery_send_verify_code.delay(username, code)
-
+            # celery_send_verify_code.delay(username, code)
+            cache.set(CACHE_REGISTER.format(username=username), code)
+            cache.expire(CACHE_REGISTER.format(username=username), timeout=5)
             return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
