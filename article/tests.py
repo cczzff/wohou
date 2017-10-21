@@ -14,6 +14,9 @@ if __name__ == '__main__':
     re.sadd('gogo', 233)
     print re.scard('gogo')
     print re.scard('gog2o')
+    ARTICLE_LIKE = 'article_like:{article_id}'
+    re.sadd(ARTICLE_LIKE.format(article_id=2), 5)
+
     if re.sismember('gogo', '2'):
         print ('???')
         re.srem('gogo', 2)

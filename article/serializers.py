@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 
 from article.models import Article
+from constant import ARTICLE_LIKE
+from wohou.settings import redis_cache
 
 
 def is_article_id(article_id):
@@ -25,9 +27,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def get_likes(self, obj):
         """
-        赞的数量
+        赞
         """
-        return '赞的数量！'
+        article_id = obj.id
+        likes = redis_cache.smembers(ARTICLE_LIKE.format(article_id=article_id))
+        return likes
 
 
 class AriticleLikesSerializer(serializers.Serializer):
