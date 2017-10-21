@@ -16,6 +16,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
 
+import redis
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -183,3 +185,5 @@ CACHES = {
         }
     }
 }
+
+redis_cache = redis.StrictRedis(host="localhost", port=6379, db=0)
