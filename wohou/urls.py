@@ -41,6 +41,7 @@ urlpatterns = [
 
     url(r'^article/$', article_views.ArticleList.as_view()),
     url(r'^article/(?P<pk>[0-9]+)/$', article_views.ArticleDetail.as_view()),
+    url(r'^article/like/$', article_views.ArticleLikesVIEW.as_view()),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 

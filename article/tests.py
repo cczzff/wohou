@@ -14,3 +14,8 @@ if __name__ == '__main__':
     re.sadd('gogo', 233)
     print re.scard('gogo')
     print re.scard('gog2o')
+    if re.sismember('gogo', '2'):
+        print ('???')
+        re.srem('gogo', 2)
+
+    print re.scard('gogo')

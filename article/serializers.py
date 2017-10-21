@@ -5,6 +5,13 @@ from rest_framework import serializers
 from article.models import Article
 
 
+def is_article_id(article_id):
+
+    article = Article.objects.filter(id=article_id)
+    if not article:
+        raise serializers.ValidationError('该用户信息不存在')
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField()
 
@@ -21,3 +28,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         赞的数量
         """
         return '赞的数量！'
+
+
+class AriticleLikesSerializer(serializers.Serializer):
+    article_id = serializers.IntegerField(validators=[is_article_id])
+
