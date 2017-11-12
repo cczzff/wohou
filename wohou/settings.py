@@ -30,7 +30,7 @@ SECRET_KEY = 'nvw128t9hdf_9nhvvu^@@b#ph$t5ywucp%tx7-v(c!08+ucamm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['39.108.187.97']
 
 
 INSTALLED_APPS = [
