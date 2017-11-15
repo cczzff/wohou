@@ -42,7 +42,7 @@ class AccountRegisterAPIView(APIView):
         data = request.data
         username = data['username']
         if Account.objects.filter(username__exact=username):
-            return Response("用户名已存在", HTTP_400_BAD_REQUEST)
+            return Response({'username': '用户名已存在'}, HTTP_400_BAD_REQUEST)
         serializer = AccountRegisterSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             username = data['username']
@@ -51,6 +51,10 @@ class AccountRegisterAPIView(APIView):
             birthday = data['birthday']
             head_img = data['head_img']
             city = data['city']
+            code = data['code']
+            if code != cache.get(CACHE_REGISTER.format(username=username)):
+                return Response({'code': '验证码错误'}, status=HTTP_400_BAD_REQUEST)
+
             Account.objects.create_user(username=username, password=password,
                                         nick_name=nick_name, birthday=birthday,
                                         head_img=head_img, city=city)
@@ -102,9 +106,9 @@ class RegisterCodeView(APIView):
         if serializer.is_valid(raise_exception=True):
             username = data['username']
             code = random.randint(1000, 9999)
-            # celery_send_verify_code.delay(username, code)
+            celery_send_verify_code.delay(username, code)
             cache.set(CACHE_REGISTER.format(username=username), code)
-            cache.expire(CACHE_REGISTER.format(username=username), timeout=5)
+            cache.expire(CACHE_REGISTER.format(username=username), timeout=60)
             return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
